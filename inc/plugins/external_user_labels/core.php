@@ -25,7 +25,7 @@ function getRenderedUserLabelsByUserId(int $userId): ?string
     return $userLabelsRendered;
 }
 
-function getUserLabelsByMembershipType(int $userId): array
+function getUserLabelsByMembershipType(int $userId): ?array
 {
     return \externalUserLabels\getUserDataById($userId)['role_memberships'] ?? null;
 }
@@ -48,7 +48,9 @@ function getRenderedLabelByMembershipType(array $labelData, string $membershipTy
 {
     $color = \htmlspecialchars_uni($labelData['color']);
 
-    $attributes = 'class="team-role team-role--' . \htmlspecialchars_uni($membershipType) . '"';
+    $roleNameNormalized = strtolower(str_replace(' ', '-', $labelData['name']));
+
+    $attributes = 'class="team-role team-role--' . \htmlspecialchars_uni($membershipType) . ' team-role--' . \htmlspecialchars_uni($roleNameNormalized) . '"';
 
     $output = '<p ' . $attributes . '>' . \htmlspecialchars_uni($labelData['name']) . '</p>';
 

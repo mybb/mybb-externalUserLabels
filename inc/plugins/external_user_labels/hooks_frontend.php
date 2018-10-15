@@ -7,15 +7,15 @@ function misc_start()
 {
     global $mybb;
 
-    if ($mybb->input['action'] == 'external_user_labels_webhook_update' && isset($_SERVER['X_GITHUB_EVENT'], $_SERVER['HTTP_X_HUB_SIGNATURE'])) {
+    if ($mybb->input['action'] == 'external_user_labels_webhook_update' && isset($_SERVER['HTTP_X_GITHUB_EVENT'], $_SERVER['HTTP_X_HUB_SIGNATURE'])) {
         $input = file_get_contents('php://input');
         $bodyData = json_decode($input, true);
 
-        if ($bodyJson !== null) {
+        if ($bodyData !== null) {
             $inputHmac = hash_hmac('sha1', $input, \externalUserLabels\getSettingValue('webhook_secret'));
 
-            if ($_SERVER['HTTP_X_HUB_SIGNATURE'] === $inputHmac) {
-                if ($_SERVER['X_GITHUB_EVENT'] != 'ping') {
+            if ($_SERVER['HTTP_X_HUB_SIGNATURE'] === 'sha1=' . $inputHmac) {
+                if ($_SERVER['HTTP_X_GITHUB_EVENT'] != 'ping') {
                     \externalUserLabels\update();
                 }
             }
