@@ -50,9 +50,12 @@ function getRenderedLabelByMembershipType(array $labelData, string $membershipTy
 
     $roleNameNormalized = strtolower(str_replace(' ', '-', $labelData['name']));
 
+    $roleUrl = \htmlspecialchars_uni(\externalUserLabels\getSettingValue('legend_url')) . '#role-' . \htmlspecialchars_uni($roleNameNormalized);
+
     $attributes = 'class="team-role team-role--' . \htmlspecialchars_uni($membershipType) . ' team-role--' . \htmlspecialchars_uni($roleNameNormalized) . '"';
 
-    $output = '<p ' . $attributes . '>' . \htmlspecialchars_uni($labelData['name']) . '</p>';
+
+    $output = '<a href="' . $roleUrl . '"><p ' . $attributes . '>' . \htmlspecialchars_uni($labelData['name']) . '</p></a>';
 
     return $output;
 }

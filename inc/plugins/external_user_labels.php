@@ -38,42 +38,8 @@ function external_user_labels_info()
 
 function external_user_labels_install()
 {
-    global $PL, $db, $cache;
+    global $db, $cache;
 
-    external_user_labels_admin_load_pluginlibrary();
-
-    // settings
-    $PL->settings(
-        'external_user_labels',
-        'External User Labels',
-        'Settings for External User Labels.',
-        [
-            'user_groups' => [
-                'title'       => 'Label user groups',
-                'description' => 'Select user groups that will have the labels assigned.',
-                'optionscode' => 'groupselect',
-                'value'       => '',
-            ],
-            'labels_source_url' => [
-                'title'       => 'Labels data URL',
-                'description' => 'Address to the JSON-encoded labels data file with an array of labels containing a <code>name</code> field.',
-                'optionscode' => 'text',
-                'value'       => '',
-            ],
-            'users_source_url' => [
-                'title'       => 'Users data URL',
-                'description' => 'Address to the JSON-encoded users data file with an array of users containing a <code>uid</code> and <code>role_membership</code> (array of membership types, each containing role names) fields.',
-                'optionscode' => 'text',
-                'value'       => '',
-            ],
-            'webhook_secret' => [
-                'title'       => 'Data synchronization webhook secret',
-                'description' => 'HMAC secret for validation of incoming webhooks to auto-update the labels data.',
-                'optionscode' => 'text',
-                'value'       => random_str(40),
-            ],
-        ]
-    );
 
     // datacache
     $cache->update('external_user_labels', [
@@ -128,6 +94,52 @@ function external_user_labels_is_installed()
     $query = $db->simple_select('settinggroups', 'gid', "name='external_user_labels'");
 
     return (bool)$db->num_rows($query);
+}
+
+function external_user_labels_activate()
+{
+    global $PL;
+
+    external_user_labels_admin_load_pluginlibrary();
+
+    // settings
+    $PL->settings(
+        'external_user_labels',
+        'External User Labels',
+        'Settings for External User Labels.',
+        [
+            'user_groups' => [
+                'title'       => 'Label user groups',
+                'description' => 'Select user groups that will have the labels assigned.',
+                'optionscode' => 'groupselect',
+                'value'       => '',
+            ],
+            'labels_source_url' => [
+                'title'       => 'Labels data URL',
+                'description' => 'Address to the JSON-encoded labels data file with an array of labels containing a <code>name</code> field.',
+                'optionscode' => 'text',
+                'value'       => '',
+            ],
+            'users_source_url' => [
+                'title'       => 'Users data URL',
+                'description' => 'Address to the JSON-encoded users data file with an array of users containing a <code>uid</code> and <code>role_membership</code> (array of membership types, each containing role names) fields.',
+                'optionscode' => 'text',
+                'value'       => '',
+            ],
+            'webhook_secret' => [
+                'title'       => 'Data synchronization webhook secret',
+                'description' => 'HMAC secret for validation of incoming webhooks to auto-update the labels data.',
+                'optionscode' => 'text',
+                'value'       => random_str(40),
+            ],
+            'legend_url' => [
+                'title'       => 'Legend URL',
+                'description' => 'An URL where the labels will point to. A <code>#role-</code> identifier with normalized rank name will be appended.',
+                'optionscode' => 'text',
+                'value'       => '',
+            ],
+        ]
+    );
 }
 
 // helpers
