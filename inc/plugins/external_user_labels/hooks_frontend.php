@@ -35,6 +35,17 @@ function member_profile_end()
     }
 }
 
+function showteam_user()
+{
+    global $user, $externalUserLabels;
+
+    if (\externalUserLabels\hasLabelGroup($user)) {
+        $externalUserLabels = \externalUserLabels\getRenderedUserLabelsByUserId($user['uid']);
+    } else {
+        $externalUserLabels = null;
+    }
+}
+
 function postbit($post)
 {
     if (\externalUserLabels\hasLabelGroup($post)) {

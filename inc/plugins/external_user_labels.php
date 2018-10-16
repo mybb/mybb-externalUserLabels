@@ -140,6 +140,15 @@ function external_user_labels_activate()
             ],
         ]
     );
+
+    // templates
+    \externalUserLabels\replaceInTemplate('showteam_usergroup_user', '{$user[\'username\']}</strong></a>', '{$user[\'username\']}</strong></a> {$externalUserLabels}');
+}
+
+function external_user_labels_deactivate()
+{
+    // templates
+    \externalUserLabels\replaceInTemplate('showteam_usergroup_user', ' {$externalUserLabels}', '');
 }
 
 // helpers

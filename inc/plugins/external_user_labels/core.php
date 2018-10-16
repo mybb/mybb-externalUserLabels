@@ -121,6 +121,13 @@ function getDelimitedSettingValues(string $name): array
     return $values[$name];
 }
 
+function replaceInTemplate(string $title, string $find, string $replace): bool
+{
+    require_once MYBB_ROOT . 'inc/adminfunctions_templates.php';
+
+    return \find_replace_templatesets($title, '#' . preg_quote($find, '#') . '#', $replace);
+}
+
 function getArrayWithColumnAsKey(array $array, string $column): array
 {
     return array_combine(array_column($array, $column), $array);
